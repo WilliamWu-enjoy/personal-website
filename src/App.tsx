@@ -277,7 +277,8 @@ const ArticlesSection = () => {
 };
 
 const AboutSection = () => (
-  <section className="py-32 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-start">
+  <>
+    <section className="py-32 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-start">
     <div className="sticky top-32">
       <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">
         About <br />
@@ -303,10 +304,74 @@ const AboutSection = () => (
       </div>
     </div>
     <div className="space-y-12">
-      <img src={about1Img} alt="About 1" className="rounded-3xl w-full" referrerPolicy="no-referrer" />
-      <img src={about2Img} alt="About 2" className="rounded-3xl w-full" referrerPolicy="no-referrer" />
-    </div>
-  </section>
+        <img src={about1Img} alt="About 1" className="rounded-3xl w-full" referrerPolicy="no-referrer" />
+        <img src={about2Img} alt="About 2" className="rounded-3xl w-full" referrerPolicy="no-referrer" />
+      </div>
+    </section>
+    
+    <section className="py-20 px-6 max-w-4xl mx-auto">
+      <h3 className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-16 text-center">
+        My <span className="text-brand-lime">Journey</span>
+      </h3>
+      <div className="relative border-l-2 border-white/10 ml-4 md:ml-0 space-y-12 pl-8 md:pl-0">
+        {[
+          {
+            year: "2025",
+            title: "生物医学工程硕士毕业",
+            description: "完成关于大语言模型在神经外科辅助诊断中的应用研究，发表 SCI 论文一篇。",
+            highlight: true
+          },
+          {
+            year: "2023",
+            title: "开启医疗 AI 探索之路",
+            description: "加入知名医疗科技公司实习，参与开发首个基于 Transformer 的病历分析助手。",
+            highlight: false
+          },
+          {
+            year: "2021",
+            title: "球鞋摄影师",
+            description: "创立个人摄影工作室，为多个潮流品牌拍摄型录，作品被 Hypebeast 收录。",
+            highlight: false
+          },
+          {
+            year: "2019",
+            title: "本科毕业",
+            description: "获得计算机科学与技术学士学位，获评优秀毕业生。",
+            highlight: false
+          }
+        ].map((item, index) => (
+          <div key={index} className="relative md:grid md:grid-cols-5 md:gap-10 items-start group">
+            {/* 时间点 (Desktop) */}
+            <div className="hidden md:block col-span-1 text-right pt-1">
+              <span className={`text-2xl font-black tracking-tighter ${item.highlight ? 'text-brand-lime' : 'text-white/40 group-hover:text-white transition-colors'}`}>
+                {item.year}
+              </span>
+            </div>
+
+            {/* 装饰点 */}
+            <div className={`absolute -left-[41px] md:left-auto md:right-0 md:relative w-5 h-5 rounded-full border-4 border-brand-dark ${item.highlight ? 'bg-brand-lime' : 'bg-white/20 group-hover:bg-white transition-colors'} mt-2 md:col-span-1 md:flex md:justify-center md:items-center md:w-auto md:h-auto md:border-0 md:bg-transparent md:mt-0`}>
+               <div className={`w-4 h-4 rounded-full border-2 border-brand-dark ${item.highlight ? 'bg-brand-lime shadow-[0_0_20px_rgba(212,255,63,0.5)]' : 'bg-white/20 group-hover:bg-white transition-colors'}`}></div>
+            </div>
+
+            {/* 内容 */}
+            <div className="col-span-3 pt-1">
+              <div className="md:hidden mb-2">
+                <span className={`text-xl font-black tracking-tighter ${item.highlight ? 'text-brand-lime' : 'text-white/40'}`}>
+                  {item.year}
+                </span>
+              </div>
+              <h4 className={`text-2xl font-bold mb-2 ${item.highlight ? 'text-white' : 'text-white/80 group-hover:text-white transition-colors'}`}>
+                {item.title}
+              </h4>
+              <p className="text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
+                {item.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </>
 );
 
 const Footer = ({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) => (

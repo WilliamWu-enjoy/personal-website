@@ -86,7 +86,7 @@ const Hero = () => (
   <InteractivePortrait
     portraitUrl={portraitImg}
     revealUrl={revealImg}
-    className="min-h-[90vh]"
+    className="h-screen"
   />
 );
 

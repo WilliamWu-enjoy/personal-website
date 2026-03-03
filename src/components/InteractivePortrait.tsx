@@ -119,7 +119,10 @@ const InteractivePortrait: React.FC<InteractivePortraitProps> = ({ portraitUrl, 
         drawW = canvas.width;
         drawH = canvas.width / aspect;
         offsetX = 0;
-        offsetY = (canvas.height - drawH) / 2;
+        // 关键修改：当图片比屏幕“瘦”时，宽度填满，高度溢出。
+        // 如果想让头部显示，应该让图片顶部对齐，即 offsetY = 0
+        // 如果之前是 (canvas.height - drawH) / 2，那就是垂直居中
+        offsetY = 0; 
       } else {
         drawH = canvas.height;
         drawW = canvas.height * aspect;
@@ -165,8 +168,11 @@ const InteractivePortrait: React.FC<InteractivePortraitProps> = ({ portraitUrl, 
     >
       {/* 底层图一 (肖像) */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
-        style={{ backgroundImage: `url(${portraitUrl})` }}
+        className="absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-500"
+        style={{ 
+          backgroundImage: `url(${portraitUrl})`,
+          backgroundPosition: 'center top' 
+        }}
       />
 
       {/* 顶层 Canvas (图二 + 水纹消散) */}

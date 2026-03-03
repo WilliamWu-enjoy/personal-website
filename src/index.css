@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-brand-dark text-white font-sans antialiased;
+    @apply bg-brand-dark text-white font-sans antialiased m-0 p-0 overflow-x-hidden;
   }
 }
 

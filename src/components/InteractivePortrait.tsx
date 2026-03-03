@@ -74,8 +74,8 @@ const InteractivePortrait: React.FC<InteractivePortraitProps> = ({ portraitUrl, 
     // 动画循环
     const animate = () => {
       if (!maskCtx || !ctx || !imagesRef.current) return;
-      const { reveal } = imagesRef.current;
-
+      const { portrait, reveal } = imagesRef.current;
+      
       // 1. Mask Canvas 淡出处理 (模拟 3秒消散)
       // 假设 60fps, 3秒 = 180帧。每次减少 alpha 1/180 ≈ 0.005
       // 但为了视觉效果，可能需要非线性或者更快的起始衰减
@@ -110,26 +110,28 @@ const InteractivePortrait: React.FC<InteractivePortraitProps> = ({ portraitUrl, 
       // 使用 source-in 只保留 Mask 区域的像素
       ctx.globalCompositeOperation = 'source-in';
       
-      // 绘制图二 (保持比例填充 Cover)
-      const aspect = reveal.width / reveal.height;
+      // 计算图片显示区域 (Contain 模式)
+      // 使用 portrait (图一) 的比例来计算，确保与背景图一致
+      const aspect = portrait.width / portrait.height;
       const canvasAspect = canvas.width / canvas.height;
       let drawW, drawH, offsetX, offsetY;
       
       if (canvasAspect > aspect) {
-        drawW = canvas.width;
-        drawH = canvas.width / aspect;
-        offsetX = 0;
-        // 关键修改：当图片比屏幕“瘦”时，宽度填满，高度溢出。
-        // 如果想让头部显示，应该让图片顶部对齐，即 offsetY = 0
-        // 如果之前是 (canvas.height - drawH) / 2，那就是垂直居中
-        offsetY = 0; 
-      } else {
+        // 屏幕比图片宽 (Desktop)：高度填满，宽度居中
         drawH = canvas.height;
         drawW = canvas.height * aspect;
         offsetX = (canvas.width - drawW) / 2;
         offsetY = 0;
+      } else {
+        // 屏幕比图片瘦 (Mobile)：宽度填满，高度居中
+        drawW = canvas.width;
+        drawH = canvas.width / aspect;
+        offsetX = 0;
+        offsetY = (canvas.height - drawH) / 2;
       }
       
+      // 绘制图二 (强制拉伸匹配图一的区域，或者保持比例绘制)
+      // 这里假设两张图尺寸一致，直接绘制到计算出的区域
       ctx.drawImage(reveal, offsetX, offsetY, drawW, drawH);
 
       // 重置混合模式
@@ -168,11 +170,8 @@ const InteractivePortrait: React.FC<InteractivePortraitProps> = ({ portraitUrl, 
     >
       {/* 底层图一 (肖像) */}
       <div 
-        className="absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-500"
-        style={{ 
-          backgroundImage: `url(${portraitUrl})`,
-          backgroundPosition: 'center top' 
-        }}
+        className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-opacity duration-500"
+        style={{ backgroundImage: `url(${portraitUrl})` }}
       />
 
       {/* 顶层 Canvas (图二 + 水纹消散) */}
